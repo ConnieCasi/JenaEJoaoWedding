@@ -184,13 +184,14 @@ section {
      visually resting on the envelope rather than floating above it. */
   --letter-travel: calc(var(--letter-start-y) + var(--letter-h) - 40px);
   --letter-reveal: calc(var(--letter-travel) + 24px);
-  --scene-y: calc(var(--letter-progress) * -64px);
+  --final-center-lift: calc(var(--settle-progress) * clamp(120px, 31vw, 160px));
+  --scene-y: calc((var(--letter-progress) * -64px) - var(--final-center-lift));
   --settle-down: calc(var(--settle-progress) * clamp(292px, 74vw, 382px));
 
   --flap-progress:   clamp(0, calc( var(--progress)         / 0.25), 1);
   --letter-progress: clamp(0, calc((var(--progress) - 0.25) / 0.63), 1);
   --settle-progress: clamp(0, calc((var(--progress) - 0.88) / 0.12), 1);
-  --escape-progress: clamp(0, calc((var(--progress) - 0.90) / 0.08), 1);
+  --escape-progress: clamp(0, calc((var(--progress) - 0.88) / 0.01), 1);
 
   position: relative;
   width: var(--w);
