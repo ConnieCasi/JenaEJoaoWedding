@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-PT"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>test</title>
+<link rel="stylesheet" href="http://localhost:8000/css/styles.css">
+<style>
+  /* Force --progress, disable JS sync */
+  :root { --progress: 0.3 !important; }
+  html, body { height: auto; min-height: 100svh; overflow: hidden; }
+  .hero { height: 100svh !important; }
+</style>
+</head><body>
+    <section class="hero" aria-label="Convite">
+      <div class="hero__sticky">
+        <div class="envelope" aria-hidden="true">
+          <div class="envelope__back"></div>
+          <div class="envelope__interior"></div>
+
+          <!-- Invitation card — slides up and translates forward in 3D so it overlaps the front -->
+          <div class="invitation">
+            <img
+              src="/assets/invitation.png"
+              alt="Convite de casamento de Eugénia e João"
+              decoding="sync"
+              fetchpriority="high"
+            />
+          </div>
+
+          <div class="envelope__front"></div>
+
+          <!-- Flap rotates -180° around its top edge to reveal a gold liner underneath -->
+          <div class="envelope__flap">
+            <div class="envelope__flap-outside"></div>
+            <div class="envelope__flap-inside"></div>
+            <div class="envelope__seal" aria-hidden="true">E&amp;J</div>
+          </div>
+        </div>
+</body></html>

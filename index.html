@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Eugénia & João — Vem casar connosco</title>
+    <meta name="description" content="Convite para o casamento de Eugénia Duarte e João Barreto." />
+
+    <!-- WhatsApp / OG preview -->
+    <meta property="og:title" content="Eugénia & João — Vem casar connosco" />
+    <meta property="og:description" content="Convite para o nosso casamento." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_PT" />
+    <meta property="og:image" content="/assets/og-preview.jpg" />
+
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/styles.css" />
+
+    <!-- Preload the invitation so the slide-out doesn't flash -->
+    <link rel="preload" as="image" href="/assets/invitation.png" fetchpriority="high" />
+  </head>
+
+  <body>
+    <!-- =========================================================
+         1 — ENVELOPE HERO (sticky scroll-driven open animation)
+         Four flat layers, ordered back → front:
+           1. envelope-back   (z=1) — paper rectangle behind everything
+           2. envelope-slot   (z=2) — clipped pocket letter for the peek-out phase
+           2b. escaped letter (z=10) — unclipped card once it leaves the pocket
+           3. envelope-front  (z=3) — front pocket with V-cut at top
+           4. envelope-flap   (z=4) — triangular flap, rotates open from top
+         ========================================================= -->
+    <section class="hero" aria-label="Convite">
+      <div class="hero__sticky">
+        <div class="envelope" aria-hidden="true">
+          <div class="envelope-back"></div>
+
+          <!-- Phase 1: clipped letter inside the pocket. This layer only
+               handles the "peeking out of the envelope" moment. -->
+          <div class="envelope-slot">
+            <div class="letter letter--inside">
+              <img
+                src="/assets/invitation.png"
+                alt="Convite de casamento de Eugénia e João"
+                decoding="sync"
+                fetchpriority="high"
+              />
+            </div>
+          </div>
+
+          <!-- Phase 2: escaped letter above all envelope layers. It uses the
+               same image, but is not inside the clipped pocket. -->
+          <div class="letter letter--escaped">
+            <img
+              src="/assets/invitation.png"
+              alt=""
+              decoding="sync"
+              fetchpriority="high"
+            />
+          </div>
+
+          <div class="envelope-front"></div>
+
+          <div class="envelope-flap"></div>
+        </div>
+
+        <p class="scroll-hint">Desliza para abrir</p>
+      </div>
+    </section>
+
+    <main>
+      <!-- =========================================================
+           2/3 — COUPLE + HEADLINE
+           ========================================================= -->
+      <section class="intro" aria-labelledby="intro-title" hidden>
+        <p class="intro__eyebrow">Vem casar connosco</p>
+        <h1 id="intro-title" class="intro__names">
+          <span data-bind="bride">Eugénia Duarte</span>
+          <span class="intro__amp">&amp;</span>
+          <span data-bind="groom">João Barreto</span>
+        </h1>
+      </section>
+
+      <!-- =========================================================
+           4 — DATE (click → .ics download → native "Add to calendar" sheet)
+           ========================================================= -->
+      <section class="date">
+        <button type="button" class="date__display" data-action="add-to-calendar" aria-label="Adicionar ao calendário">
+          <span class="date__primary" data-bind="dateLong">—</span>
+          <span class="date__time" data-bind="dateTime">—</span>
+        </button>
+      </section>
+
+      <!-- =========================================================
+           5 — CEREMONY + RECEPTION (click each → maps options dialog)
+           ========================================================= -->
+      <section class="venue" aria-labelledby="ceremony-title">
+        <h2 id="ceremony-title" class="section-title">Cerimónia</h2>
+        <button type="button" class="venue__trigger" data-action="open-maps" data-venue="ceremony">
+          <span class="venue__name" data-bind="ceremonyName">—</span>
+          <span class="venue__address" data-bind="ceremonyAddress">—</span>
+        </button>
+      </section>
+
+      <section class="venue" aria-labelledby="reception-title">
+        <h2 id="reception-title" class="section-title">Receção</h2>
+        <button type="button" class="venue__trigger" data-action="open-maps" data-venue="reception">
+          <span class="venue__name" data-bind="receptionName">—</span>
+          <span class="venue__address" data-bind="receptionAddress">—</span>
+        </button>
+      </section>
+
+      <!-- =========================================================
+           6 — DRESS CODE
+           ========================================================= -->
+      <section class="dress" aria-labelledby="dress-title">
+        <img
+          class="venue__photo"
+          alt="Capela de Nossa Senhora do Mar"
+          data-bind-src="ceremonyPhoto"
+        />
+        <h2 id="dress-title" class="section-title">Dress code</h2>
+        <p class="dress__title" data-bind="dressTitle">—</p>
+        <p class="dress__desc" data-bind="dressDesc">—</p>
+      </section>
+
+      <!-- =========================================================
+           7 — WHERE TO STAY
+           ========================================================= -->
+      <section class="hotels" aria-labelledby="hotels-title">
+        <h2 id="hotels-title" class="section-title">Onde ficar</h2>
+        <div class="hotels__grid" data-hotels>
+          <!-- Cards rendered by main.js from config.hotels -->
+        </div>
+        <p class="hotels__empty" hidden>Sugestões em breve.</p>
+      </section>
+
+      <!-- =========================================================
+           8 — RSVP (button only; form lives in <dialog> below)
+           ========================================================= -->
+      <section class="rsvp">
+        <button type="button" class="primary-btn" data-action="open-rsvp">
+          Confirmar presença
+        </button>
+        <p class="rsvp__deadline">
+          Responde até <span data-bind="rsvpDeadline">—</span>
+        </p>
+      </section>
+
+      <!-- =========================================================
+           9 — HONEYMOON
+           ========================================================= -->
+      <section class="honeymoon" aria-labelledby="honeymoon-title">
+        <img
+          class="section-photo"
+          alt="Ilustração de um templo no Japão"
+          data-bind-src="honeymoonPhoto"
+        />
+        <h2 id="honeymoon-title" class="section-title">Lua-de-mel no Japão</h2>
+        <p class="honeymoon__desc" data-bind="honeymoonDesc">—</p>
+        <div class="honeymoon__transfer" aria-label="Dados para transferência bancária">
+          <span class="honeymoon__transfer-label"><span data-bind="honeymoonTransferLabel">—</span>:</span>
+          <strong class="honeymoon__transfer-value" data-bind="honeymoonTransferValue">—</strong>
+          <button type="button" class="primary-btn honeymoon__copy" data-action="copy-transfer" data-bind="honeymoonTransferAction">
+            Copiar NIF
+          </button>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           10 — IMPORTANT INFO
+           ========================================================= -->
+      <section class="important-info" aria-labelledby="important-info-title">
+        <h2 id="important-info-title" class="section-title">Informações importantes</h2>
+        <div class="important-info__list" data-important-info>
+          <!-- <details> rendered by main.js -->
+        </div>
+      </section>
+
+      <!-- =========================================================
+           11 — GALLERY
+           ========================================================= -->
+      <section class="gallery" aria-labelledby="gallery-title" hidden>
+        <h2 id="gallery-title" class="sr-only">Galeria</h2>
+        <div class="gallery__carousel" data-gallery-carousel>
+          <button type="button" class="gallery__nav" data-gallery-prev aria-label="Foto anterior">‹</button>
+          <div class="gallery__track" data-gallery>
+            <!-- Images rendered by main.js -->
+          </div>
+          <button type="button" class="gallery__nav" data-gallery-next aria-label="Foto seguinte">›</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- =========================================================
+         Maps dialog (opens when address is clicked)
+         ========================================================= -->
+    <dialog class="sheet" id="maps-dialog" aria-label="Abrir no mapa">
+      <form method="dialog" class="sheet__inner">
+        <p class="sheet__title">Abrir no mapa</p>
+        <div class="sheet__actions">
+          <a class="map-btn" data-map="google" target="_blank" rel="noopener">Google Maps</a>
+          <a class="map-btn" data-map="apple" target="_blank" rel="noopener">Apple Maps</a>
+          <a class="map-btn" data-map="waze" target="_blank" rel="noopener">Waze</a>
+        </div>
+        <button type="submit" class="sheet__close">Cancelar</button>
+      </form>
+    </dialog>
+
+    <!-- =========================================================
+         RSVP dialog (opens when "Confirmar presença" is clicked)
+         ========================================================= -->
+    <dialog class="sheet sheet--form" id="rsvp-dialog" aria-labelledby="rsvp-dialog-title">
+      <div class="sheet__inner">
+        <button type="button" class="sheet__close-x" data-action="close-rsvp" aria-label="Fechar">×</button>
+        <p class="sheet__title" id="rsvp-dialog-title">Confirma a tua presença</p>
+
+        <!-- Closed-state message (shown after deadline) -->
+        <div class="rsvp__closed" hidden>
+          <p>Período de RSVP encerrado — contacta-nos diretamente.</p>
+        </div>
+
+        <form class="rsvp__form" novalidate>
+          <label class="field">
+            <span>Nome</span>
+            <input type="text" name="name" required autocomplete="name" />
+          </label>
+
+          <fieldset class="field field--radio">
+            <legend>Vais estar presente?</legend>
+            <label><input type="radio" name="attending" value="sim" required /> Sim</label>
+            <label><input type="radio" name="attending" value="nao" /> Não</label>
+          </fieldset>
+
+          <label class="field field--check">
+            <input type="checkbox" name="hasPlusOne" data-toggle="plus-one-name" />
+            <span>Vou levar acompanhante</span>
+          </label>
+          <label class="field" data-when="plus-one-name" hidden>
+            <span>Nome do acompanhante</span>
+            <input type="text" name="plusOneName" autocomplete="off" />
+          </label>
+
+          <label class="field field--check">
+            <input type="checkbox" name="hasKids" data-toggle="kids-list" />
+            <span>Vou levar crianças</span>
+          </label>
+          <div class="field" data-when="kids-list" hidden>
+            <span class="field__label">Crianças</span>
+            <div class="kids" data-kids></div>
+            <button type="button" class="link-btn" data-action="add-kid">+ Adicionar criança</button>
+          </div>
+
+          <label class="field">
+            <span>Restrições alimentares (opcional)</span>
+            <textarea name="dietary" rows="3"></textarea>
+          </label>
+
+          <label class="honeypot" aria-hidden="true">
+            Website
+            <input type="text" name="website" tabindex="-1" autocomplete="off" />
+          </label>
+
+          <p class="rsvp__hint">Podes voltar a submeter para alterar a tua resposta.</p>
+
+          <button type="submit" class="primary-btn">Enviar resposta</button>
+
+          <p class="rsvp__status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </dialog>
+
+    <footer class="footer">
+      <p data-bind="footerText">—</p>
+    </footer>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>
