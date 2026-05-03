@@ -185,6 +185,7 @@ section {
   --letter-travel: calc(var(--letter-start-y) + var(--letter-h) - 40px);
   --letter-reveal: calc(var(--letter-travel) + 24px);
   --scene-y: calc(var(--letter-progress) * -64px);
+  --settle-down: calc(var(--settle-progress) * clamp(292px, 74vw, 382px));
 
   --flap-progress:   clamp(0, calc( var(--progress)         / 0.25), 1);
   --letter-progress: clamp(0, calc((var(--progress) - 0.25) / 0.63), 1);
@@ -236,7 +237,7 @@ section {
   pointer-events: none;
   --letter-y: calc(var(--letter-progress) * -1 * var(--letter-travel));
   --bounce-y: calc(sin(var(--settle-progress) * 180deg) * -4px);
-  transform: translate(-50%, calc(var(--letter-y) + var(--bounce-y)));
+  transform: translate(-50%, calc(var(--letter-y) + var(--settle-down) + var(--bounce-y)));
   will-change: transform;
 }
 

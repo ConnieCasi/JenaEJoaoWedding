@@ -122,7 +122,7 @@ Mechanics:
 - 0.25–0.88 → invitation card translates upward from deep inside the pocket; initially only a small top strip is visible through the V opening.
 - The pocket mask opens upward with the letter during the slide-out, so the invitation visibly leaves the envelope before any duplicate/top-layer handoff happens.
 - The handoff from the pocket layer to the unclipped escaped layer starts only after the whole invitation has geometrically cleared the envelope pocket (`progress >= 0.90`), not merely after the slide-out timeline begins.
-- 0.88–1.0 → invitation settles above the open envelope, fully visible and above all envelope layers.
+- 0.88–1.0 → invitation settles noticeably downward above the open envelope, fully visible, vertically balanced, and above all envelope layers.
 - The envelope scene may translate slightly upward with the letter so the final card remains vertically balanced and never crops at the top of the viewport.
 - After sticky range ends, normal scroll resumes into the rest of the page.
 - `prefers-reduced-motion`: skip animation, snap straight to the open state.
