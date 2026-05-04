@@ -47,8 +47,8 @@ export const config = {
   // Photos for the final carousel section.
   // Put images in /assets/carosel photos/ and list them here.
   gallery: [
-    "/assets/carosel photos/01.jpeg",
-    "/assets/carosel photos/02.jpeg",
+    "/assets/carosel photos/01.png",
+    "/assets/carosel photos/02.png",
     "/assets/carosel photos/03.jpeg",
     "/assets/carosel photos/04.jpeg",
     "/assets/carosel photos/05.jpeg",
@@ -59,6 +59,7 @@ export const config = {
     "/assets/carosel photos/10.jpeg",
     "/assets/carosel photos/11.jpeg",
     "/assets/carosel photos/12.jpeg",
+    "/assets/carosel photos/13.jpeg",
   ],
 
   importantInfo: [

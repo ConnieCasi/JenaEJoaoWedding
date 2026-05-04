@@ -301,8 +301,9 @@ section {
 }
 
 /* 4 — envelope-flap (z=4) — one solid triangle, hinged at the top edge.
-   No opacity, gradients, filters, masks, or crossfaded faces are used here:
-   the only animated property is transform, so the flap cannot ghost/fade. */
+   No opacity, gradients, filters, masks, or crossfades are used here:
+   only the wrapper transform changes, while backface-visibility picks
+   the darker outside or lighter underside. */
 .envelope-flap {
   position: absolute;
   top: 0;
@@ -311,13 +312,16 @@ section {
   height: var(--flap-h);
   background: none;
   transform-origin: top center;
-  transform: scaleY(calc(1 - (var(--flap-progress) * 2)));
+  transform: rotateX(calc(var(--flap-progress) * -160deg));
+  transform-style: preserve-3d;
+  backface-visibility: visible;
   z-index: 2;
   will-change: transform;
   pointer-events: none;
 }
 
-.envelope-flap::before {
+.envelope-flap::before,
+.envelope-flap::after {
   content: "";
   position: absolute;
   top: 0;
@@ -328,13 +332,18 @@ section {
   border-right: calc(var(--w) / 2) solid transparent;
   border-top-width: var(--flap-h);
   border-top-style: solid;
-  border-top-color: var(--envelope-flap);
-  transform: translateX(-50%);
+  backface-visibility: hidden;
   pointer-events: none;
 }
 
-.envelope.is-flap-underside .envelope-flap::before {
+.envelope-flap::before {
+  border-top-color: var(--envelope-flap);
+  transform: translateX(-50%) translateZ(0.1px);
+}
+
+.envelope-flap::after {
   border-top-color: var(--envelope-flap-inside);
+  transform: translateX(-50%) rotateY(180deg) translateZ(0.1px);
 }
 
 /* --progress is driven by JS in main.js (setupAnimationFallback) on every frame.

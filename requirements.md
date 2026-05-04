@@ -120,7 +120,7 @@ Mechanics:
 - The flap layer sits behind the letter/front pocket throughout the animation so it reads as folded-back paper rather than a panel floating over the invitation; the card remains invisible until the flap begins opening.
 - The front pocket is an open pocket shape, not a second closed flap; it should mask only the lower portion of the card while leaving the envelope mouth visually open.
 - The flap and front-pocket opening must share the same V geometry: identical top-corner shoulders and centre tip alignment, so they read as parts of the same folded envelope. The flap point should not carry extra edge shadow or darker shading.
-- The flap must never fade, dissolve, blur, or use mask/gradient fades during opening. It should animate only by transform. Use one visible solid triangle at any point; the outside/front is slightly darker cream for depth, and the underside/inside switches to lighter cream after the hinge crosses halfway, without crossfading.
+- The flap must never fade, dissolve, blur, or use mask/gradient fades during opening. It should animate only by `rotateX()` from `transform-origin: top center`. Use two pseudo-element faces with `backface-visibility: hidden` so exactly one solid triangle is visible at a time: the outside/front is slightly darker cream, and the underside/inside is light beige matching the envelope. Do not use `scaleY()` to simulate opening.
 - 0.25–0.88 → invitation card translates upward from the envelope opening; its start position is anchored near the top/mouth of the envelope rather than the bottom pocket.
 - The pocket mask opens upward with the letter during the slide-out, so the invitation visibly leaves the envelope before any duplicate/top-layer handoff happens.
 - The handoff from the pocket layer to the unclipped escaped layer starts as soon as the invitation reaches its furthest-up / fully-out position and should be almost instant (`progress ≈ 0.88–0.89`), before the final downward settle.
@@ -260,7 +260,7 @@ Do not include "Posso levar crianças?" or "Posso levar acompanhante?" here beca
 ### Still pending before launch
 - **Chapel photo** — save as `/assets/chapel.png`.
 - **Lat/lng** for both venues — optional polish; address fallback works in the meantime.
-- **Carousel photos** — save into `/assets/carosel photos/` and list in `config.gallery`.
+- **Carousel photos** — current replacement set is saved into `/assets/carosel photos/` and listed in `config.gallery`.
 - **Honeymoon bank-transfer value** — currently labelled as NIF per host request; replace `PLACEHOLDER_NIF` before launch.
 - **Names format** — host is undecided between full names ("Eugénia Duarte & João Barreto") and first names only ("Eugénia & João"). Currently set to full names.
 - **Confirmation of color palette + fonts** (default sage / cream / dusty rose pending host approval).

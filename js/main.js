@@ -489,7 +489,6 @@ function setupAnimationFallback() {
 
   let raf = 0;
   let lastSettled = false;
-  let lastFlapUnderside = false;
   const update = () => {
     raf = 0;
     const rect = hero.getBoundingClientRect();
@@ -497,12 +496,6 @@ function setupAnimationFallback() {
     if (total <= 0) return;
     const progressed = Math.min(Math.max(-rect.top / total, 0), 1);
     root.style.setProperty("--progress", progressed.toFixed(4));
-
-    const flapUnderside = progressed >= 0.125;
-    if (flapUnderside !== lastFlapUnderside) {
-      envelope?.classList.toggle("is-flap-underside", flapUnderside);
-      lastFlapUnderside = flapUnderside;
-    }
 
     /* The card only counts as settled after the geometric slide-out is
        complete, not merely after the first movement phase starts. */
