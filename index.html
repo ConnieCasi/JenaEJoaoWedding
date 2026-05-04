@@ -111,32 +111,18 @@
       </section>
 
       <!-- =========================================================
-           6 — DRESS CODE
+           6 — CHAPEL PHOTO
            ========================================================= -->
-      <section class="dress" aria-labelledby="dress-title">
+      <section class="venue-photo" aria-label="Capela de Nossa Senhora do Mar">
         <img
           class="venue__photo"
           alt="Capela de Nossa Senhora do Mar"
           data-bind-src="ceremonyPhoto"
         />
-        <h2 id="dress-title" class="section-title">Dress code</h2>
-        <p class="dress__title" data-bind="dressTitle">—</p>
-        <p class="dress__desc" data-bind="dressDesc">—</p>
       </section>
 
       <!-- =========================================================
-           7 — WHERE TO STAY
-           ========================================================= -->
-      <section class="hotels" aria-labelledby="hotels-title">
-        <h2 id="hotels-title" class="section-title">Onde ficar</h2>
-        <div class="hotels__grid" data-hotels>
-          <!-- Cards rendered by main.js from config.hotels -->
-        </div>
-        <p class="hotels__empty" hidden>Sugestões em breve.</p>
-      </section>
-
-      <!-- =========================================================
-           8 — RSVP (button only; form lives in <dialog> below)
+           7 — RSVP (button only; form lives in <dialog> below)
            ========================================================= -->
       <section class="rsvp">
         <button type="button" class="primary-btn" data-action="open-rsvp">
@@ -148,14 +134,9 @@
       </section>
 
       <!-- =========================================================
-           9 — HONEYMOON
+           8 — HONEYMOON
            ========================================================= -->
       <section class="honeymoon" aria-labelledby="honeymoon-title">
-        <img
-          class="section-photo"
-          alt="Ilustração de um templo no Japão"
-          data-bind-src="honeymoonPhoto"
-        />
         <h2 id="honeymoon-title" class="section-title">Lua-de-mel no Japão</h2>
         <p class="honeymoon__desc" data-bind="honeymoonDesc">—</p>
         <div class="honeymoon__transfer" aria-label="Dados para transferência bancária">
@@ -165,10 +146,15 @@
             Copiar NIF
           </button>
         </div>
+        <img
+          class="section-photo honeymoon__photo"
+          alt="Ilustração de um templo no Japão"
+          data-bind-src="honeymoonPhoto"
+        />
       </section>
 
       <!-- =========================================================
-           10 — IMPORTANT INFO
+           9 — IMPORTANT INFO
            ========================================================= -->
       <section class="important-info" aria-labelledby="important-info-title">
         <h2 id="important-info-title" class="section-title">Informações importantes</h2>
@@ -178,7 +164,7 @@
       </section>
 
       <!-- =========================================================
-           11 — GALLERY
+           10 — GALLERY
            ========================================================= -->
       <section class="gallery" aria-labelledby="gallery-title" hidden>
         <h2 id="gallery-title" class="sr-only">Galeria</h2>

@@ -31,22 +31,6 @@ export const config = {
     lng: 0,
   },
 
-  dressCode: {
-    title: "Casual chique",
-    description: "Bonito, mas pronto para dançar.",
-  },
-
-  // Each entry becomes a card in the "Onde ficar" section.
-  hotels: [
-    // {
-    //   name: "Hotel Exemplo",
-    //   distance: "5 min de carro",
-    //   priceRange: "€€",
-    //   url: "https://...",
-    //   photo: "/assets/photos/hotel-1.jpg",
-    // },
-  ],
-
   honeymoon: {
     image: {
       src: "/assets/japan.png",
@@ -79,6 +63,22 @@ export const config = {
 
   importantInfo: [
     {
+      q: "O que vestir?",
+      a: "Traje elegante descontraído, pronto para dançar.",
+    },
+    {
+      q: "Devo levar casaco?",
+      a: "Sim. À noite pode ficar frio, por isso traz um casaco.",
+    },
+    {
+      q: "Que calçado devo levar?",
+      a: "Saltos altos opcionais, boa disposição obrigatória.",
+    },
+    {
+      q: "Onde ficar?",
+      a: "Em Almograve e à volta não existem hotéis. Há, no entanto, alojamentos locais (quartos e casas) e uma pousada de juventude. Poderíamos dar sugestões, mas aconselhamos ir ao Booking.com. Se tencionarem lá dormir, aconselhamos marcar o quanto antes.",
+    },
+    {
       q: "Onde posso estacionar?",
       a: "Há lugares perto da capela e um estacionamento maior na Avenida do Mar, a poucos minutos a pé.",
     },
@@ -87,16 +87,8 @@ export const config = {
       a: "A cerimónia começa às 13:00. A receção segue depois, no Bar da Praia em Almograve, e acaba quando acabar.",
     },
     {
-      q: "Devo levar casaco?",
-      a: "Sim. À noite pode ficar frio, por isso traz um casaco.",
-    },
-    {
-      q: "Que calçado devo levar?",
-      a: "O calçado é normal, mas traz sapatos confortáveis para dançar.",
-    },
-    {
       q: "E se chover?",
-      a: "Se chover, podemos ter de mudar os planos à última hora.",
+      a: "Se chover, podemos ter de mudar os planos à última hora. Serão informados.",
     },
   ],
 

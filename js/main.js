@@ -59,8 +59,6 @@ function bindContent() {
     ceremonyAddress: config.ceremony.address,
     receptionName: config.reception.name,
     receptionAddress: config.reception.address,
-    dressTitle: config.dressCode.title,
-    dressDesc: config.dressCode.description,
     rsvpDeadline: formatDeadline(config.rsvpDeadline),
     honeymoonDesc: config.honeymoon.description,
     honeymoonTransferLabel: config.honeymoon.bankTransfer.label,
@@ -79,7 +77,6 @@ function bindContent() {
     src: config.ceremony.photo,
     alt: config.ceremony.name,
   });
-
   bindImage("honeymoonPhoto", config.honeymoon.image);
 }
 
@@ -381,35 +378,8 @@ function setupRsvpSubmit() {
 }
 
 /* =========================================================
-   Hotels, gallery carousel & important info rendering
+   Gallery carousel & important info rendering
    ========================================================= */
-
-function renderHotels() {
-  const grid = $("[data-hotels]");
-  const empty = $(".hotels__empty");
-  if (!grid) return;
-  if (!config.hotels.length) {
-    if (empty) empty.hidden = false;
-    return;
-  }
-  grid.innerHTML = config.hotels
-    .map((h) => {
-      const photo = h.photo
-        ? `<img src="${h.photo}" alt="${h.name}" loading="lazy" />`
-        : "";
-      return `
-        <article class="hotel-card">
-          ${photo}
-          <div class="hotel-card__body">
-            <h3 class="hotel-card__name">${h.name}</h3>
-            <p class="hotel-card__meta">${h.distance} · ${h.priceRange}</p>
-            <a href="${h.url}" target="_blank" rel="noopener">Reservar →</a>
-          </div>
-        </article>
-      `;
-    })
-    .join("");
-}
 
 function renderGallery() {
   const track = $("[data-gallery]");
@@ -560,7 +530,6 @@ setupRsvpToggles();
 setupKids();
 setupDeadline();
 setupRsvpSubmit();
-renderHotels();
 renderGallery();
 renderImportantInfo();
 setupAnimationFallback();

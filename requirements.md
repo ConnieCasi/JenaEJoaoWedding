@@ -2,9 +2,9 @@
 
 ## Context
 
-Building a one-page wedding invitation site for the user's mother (Eugénia Duarte) and her partner (João Barreto). The site replaces a paper invitation: guests open the link, watch an envelope open as they scroll, see the invitation image, then access all the practical wedding info (date, venue, dress code, hotels, RSVP, honeymoon gift, important information, and gallery). All copy is in European Portuguese. Mobile-first because most guests will open it on their phones, but it must look polished on desktop too.
+Building a one-page wedding invitation site for the user's mother (Eugénia Duarte) and her partner (João Barreto). The site replaces a paper invitation: guests open the link, watch an envelope open as they scroll, see the invitation image, then access all the practical wedding info (date, venue, RSVP, honeymoon gift, important information, and gallery). All copy is in European Portuguese. Mobile-first because most guests will open it on their phones, but it must look polished on desktop too.
 
-Several pieces of content (invitation image, chapel photo, hotel list, photo gallery, bank-transfer value) are not yet known — the build uses clearly marked placeholders in a single config file so the user can fill them in later without touching layout code.
+Several pieces of content (invitation image, chapel photo, photo gallery, bank-transfer value) are not yet known — the build uses clearly marked placeholders in a single config file so the user can fill them in later without touching layout code.
 
 ---
 
@@ -75,8 +75,6 @@ export const config = {
     address: "Almograve",
     lat: 0, lng: 0,
   },
-  dressCode: { title: "Casual chique", description: "..." },
-  hotels: [ { name, distance, priceRange, url, photo } ],
   honeymoon: {
     image: { src: "/assets/japan.png", alt: "Ilustração de um templo no Japão" },
     bankTransfer: { label: "NIF", value: "PLACEHOLDER_NIF" },
@@ -98,12 +96,11 @@ export const config = {
 4. **Date (clickable)** — clicking downloads a `wedding.ics` file that adds the event to any calendar.
 5. **Cerimónia** — chapel name + address; tap to open the maps dialog with the chapel's deep-links.
 6. **Receção** — reception venue name + address; tap to open the maps dialog with the reception's deep-links.
-7. **Dress code** — chapel illustration above the section, then "Casual chique" + tagline.
-8. **Onde ficar** — card grid of nearby hotels (photo, name, distance from venue, price range, "Reservar" link).
-9. **RSVP** — button reveals a form (see RSVP section below).
-10. **Lua-de-mel no Japão** — Japan illustration above the section, then short paragraph + visible bank-transfer detail (`NIF` placeholder) + "Copiar NIF" button.
-11. **Informações importantes** — accordion of host-written practical notes.
-12. **Galeria** — final photo carousel from `/assets/carosel photos/`.
+7. **Chapel photo** — chapel image from `config.ceremony.photo`, shown immediately after the ceremony/reception addresses at 90% opacity.
+8. **RSVP** — button reveals a form (see RSVP section below).
+9. **Lua-de-mel no Japão** — short paragraph + visible bank-transfer detail (`NIF` placeholder) + "Copiar NIF" button, with the Japan illustration below the transfer details.
+10. **Informações importantes** — accordion of host-written practical notes, including clothing, coat, shoes, where to stay, parking, timings, and rain plan.
+11. **Galeria** — final photo carousel from `/assets/carosel photos/`.
 
 Countdown was removed from the original plan — host preference (didn't want a ticking days-remaining number on the page).
 
@@ -117,6 +114,7 @@ Countdown was removed from the original plan — host preference (didn't want a 
 
 Mechanics:
 - Layer order is `envelope-back` → `envelope-slot`/clipped `letter--inside` → `envelope-front` → `envelope-flap`, then an unclipped `letter--escaped` above all envelope layers.
+- Visual treatment should be clean, minimal, and editorial rather than photorealistic: matte cream/beige stationery colours (`#f7f3ee` page background, `#efe6d8` envelope, `#e4d8c5` flap), perfectly straight symmetrical edges, a sharp triangular flap, thin precise fold lines, and only soft depth (`0 8px 20px rgba(0,0,0,0.06)`). Avoid glossy effects, heavy gradients, soft blobs, and dirty grey tones. Keep the effect CSS-only so the invitation still loads as a static, no-build site.
 - The outer scene/envelope must not use `overflow: hidden`; only the inner `envelope-slot` may clip the letter while it is inside the pocket.
 - Scroll progress 0.0–0.25 → flap rotates open (`rotateX(0deg)` → `rotateX(160deg)`) from `transform-origin: top center`.
 - 0.25–0.88 → invitation card translates upward from deep inside the pocket; initially only a small top strip is visible through the V opening.
@@ -187,7 +185,7 @@ Numbered steps to: create the Sheet, paste the provided Apps Script (≈ 20 line
 ## Honeymoon gift
 
 - No external payment page.
-- Show the Japan illustration from `config.honeymoon.image` above the section at the same rendered size as the chapel image.
+- Show the Japan illustration from `config.honeymoon.image` below the bank-transfer details at the same rendered size as the chapel image.
 - Show the bank-transfer detail directly from `config.honeymoon.bankTransfer`.
 - Current label is `NIF` because that is what the host requested; if this should actually be NIB/IBAN, change only `config.honeymoon.bankTransfer.label` and `value`.
 - Button copies the value to the clipboard and shows a short inline state ("NIF copiado", "NIF por confirmar", or fallback copy guidance).
@@ -204,7 +202,17 @@ Scroll-snap carousel of photos. Images live in `/assets/carosel photos/` and are
 
 Native `<details>` / `<summary>` accordion — keyboard accessible by default, no custom widget needed.
 
-Locked entries cover: estacionamento, horário, cold evening / coat, comfortable shoes for dancing, and rain plan may change at the last minute. Do not include "Posso levar crianças?" or "Posso levar acompanhante?" here because those choices are already handled inside the RSVP form.
+Locked entries, in order:
+
+1. **O que vestir?** — "Traje elegante descontraído, pronto para dançar."
+2. **Devo levar casaco?** — cold evening / coat guidance.
+3. **Que calçado devo levar?** — "Saltos altos opcionais, boa disposição obrigatória."
+4. **Onde ficar?** — explain that there are no hotels in or around Almograve, but there are local accommodations and a youth hostel; advise guests to use Booking.com and book early if sleeping there.
+5. **Onde posso estacionar?** — parking guidance.
+6. **A que horas começa e acaba?** — ceremony and reception timing.
+7. **E se chover?** — plans may change at the last minute and guests will be informed.
+
+Do not include "Posso levar crianças?" or "Posso levar acompanhante?" here because those choices are already handled inside the RSVP form.
 
 ---
 
@@ -237,10 +245,9 @@ Locked entries cover: estacionamento, horário, cold evening / coat, comfortable
 - **Date display:** "Sábado, 3 de Outubro 2026".
 - **Cerimónia:** Capela de Nossa Senhora do Mar, Zambujeira do Mar.
 - **Receção:** Bar da Praia, Almograve.
-- **Dress code:** "Casual chique" — tagline "Bonito, mas pronto para dançar." Section heading is "Dress code".
 - **RSVP deadline:** 1 August 2026.
 - **Host email (RSVP notifications):** `jenaejoaocasamento@gmail.com`.
-- **Informações importantes:** entries written for estacionamento, horário, casaco/frio à noite, calçado confortável, and rain-plan flexibility. Crianças and acompanhante entries were removed from this accordion because those choices are handled in RSVP.
+- **Informações importantes:** entries written, in order, for what to wear, coat, shoes, where to stay, parking, timing, and rain-plan flexibility. Crianças and acompanhante entries were removed from this accordion because those choices are handled in RSVP.
 - **Footer:** "Vemo-nos lá — Jena e João", rendered in the same body font as the rest of the page.
 - **Guest count (rough):** ~65.
 - **Headline:** "Vem casar connosco" (default kept).
@@ -250,7 +257,6 @@ Locked entries cover: estacionamento, horário, cold evening / coat, comfortable
 - **Invitation image** (high-resolution, from Canva).
 - **Chapel photo** — save as `/assets/chapel.png`.
 - **Lat/lng** for both venues — optional polish; address fallback works in the meantime.
-- **Hotel list** (name, distance, price range, booking URL, photo per hotel).
 - **Carousel photos** — save into `/assets/carosel photos/` and list in `config.gallery`.
 - **Honeymoon bank-transfer value** — currently labelled as NIF per host request; replace `PLACEHOLDER_NIF` before launch.
 - **Names format** — host is undecided between full names ("Eugénia Duarte & João Barreto") and first names only ("Eugénia & João"). Currently set to full names.

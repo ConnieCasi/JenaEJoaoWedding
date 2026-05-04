@@ -8,7 +8,7 @@
 /* ---------- Tokens ---------- */
 :root {
   /* Palette: soft cream / sage / dusty rose. Confirm before launch. */
-  --bg: #faf6ef;
+  --bg: #f7f3ee;
   --surface: #fffdf8;
   --ink: #2b2a26;
   --ink-soft: #5a564d;
@@ -142,21 +142,20 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  background:
-    radial-gradient(ellipse at 50% 70%, #fffdf6 0%, var(--bg) 70%);
+  background: var(--bg);
 }
 
 .scroll-hint {
   position: absolute;
-  bottom: max(24px, env(safe-area-inset-bottom));
+  bottom: max(16px, env(safe-area-inset-bottom));
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 13px;
-  letter-spacing: 0.18em;
+  font-size: 11px;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  opacity: calc(1 - var(--progress) * 2);
+  opacity: calc((1 - var(--progress) * 2) * 0.52);
   pointer-events: none;
 }
 
@@ -171,6 +170,11 @@ section {
   --w: min(86vw, 420px);
   /* Envelope aspect 4:3 (landscape). */
   --h: calc(var(--w) * 0.75);
+  --fold-tip: 68%;
+  --envelope-paper: #efe6d8;
+  --envelope-flap: #e4d8c5;
+  --fold-line: rgba(113, 91, 62, 0.14);
+  --fold-highlight: rgba(255, 255, 255, 0.42);
 
   /* Letter geometry — derived once so the slot clip can reference the
      same numbers that drive the .letter's width and aspect. */
@@ -178,7 +182,7 @@ section {
   --letter-h: calc(var(--letter-w) * 10 / 7);
   /* Park the letter deep in the pocket: its top starts near the V tip, so
      only a small strip peeks through after the flap opens. */
-  --letter-start-y: calc(var(--h) * 0.36);
+  --letter-start-y: calc(var(--h) * 0.7);
   /* Travel far enough that the card's lower edge clears the pocket before
      the top-layer handoff starts. The 40px overlap keeps the final card
      visually resting on the envelope rather than floating above it. */
@@ -205,12 +209,20 @@ section {
 .envelope-back {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #fdfaf2 0%, #f1e9d3 100%);
-  border-radius: 6px;
-  box-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.04),
-    0 18px 28px rgba(60, 50, 30, 0.16);
+  background: var(--envelope-paper);
+  border-radius: 4px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   z-index: 1;
+}
+
+.envelope-back::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32), transparent 28%),
+    linear-gradient(0deg, rgba(113, 91, 62, 0.04), transparent 34%);
+  pointer-events: none;
 }
 
 /* 2a — envelope-slot (z=2) — the only masked area in the animation.
@@ -266,28 +278,20 @@ section {
     0 10px 24px rgba(40, 30, 10, 0.18);
 }
 
-/* 3 — envelope-front (z=3) — front pocket with V-cut at top
-   Polygon vertices: top-left → V tip (50% 35%) → top-right → bottom-right → bottom-left.
-   The V tip at 35% matches the flap height, so the closed flap covers the cut exactly. */
+/* 3 — envelope-front (z=3) — front pocket with a deeper V-fold.
+   The V tip matches --fold-tip, so the closed flap covers the cut exactly. */
 .envelope-front {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #fcf8ec 0%, #ebe2c5 100%);
-  clip-path: polygon(0 0, 50% 35%, 100% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(113, 91, 62, 0.08) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(154deg, transparent 49.82%, var(--fold-line) 49.96%, var(--fold-line) 50.04%, transparent 50.18%),
+    linear-gradient(26deg, transparent 49.82%, var(--fold-highlight) 49.96%, var(--fold-highlight) 50.04%, transparent 50.18%),
+    var(--envelope-paper);
+  clip-path: polygon(0 0, 50% var(--fold-tip), 100% 0, 100% 100%, 0 100%);
   z-index: 3;
-  border-radius: 6px;
-}
-
-/* Subtle vertical seam down the front pocket from the V tip */
-.envelope-front::after {
-  content: "";
-  position: absolute;
-  top: 35%;
-  bottom: 0;
-  left: 50%;
-  width: 1px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), transparent);
-  pointer-events: none;
+  border-radius: 4px;
+  box-shadow: inset 0 -1px 0 rgba(113, 91, 62, 0.08);
 }
 
 /* 4 — envelope-flap (z=4) — triangular flap, rotates 0deg → 160deg
@@ -299,15 +303,26 @@ section {
   top: 0;
   left: 0;
   width: 100%;
-  height: 35%;
-  background: linear-gradient(180deg, #fdfaf2 0%, #ebe2c5 100%);
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  height: var(--fold-tip);
+  background: none;
   transform-origin: top center;
   transform: rotateX(calc(var(--flap-progress) * 160deg));
   backface-visibility: hidden;
   z-index: 4;
   will-change: transform;
   pointer-events: none;
+}
+
+.envelope-flap::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 24%),
+    var(--envelope-flap);
+  clip-path: polygon(-0.4% 0, 100.4% 0, 50% 100.8%);
+  filter: drop-shadow(0 4px 7px rgba(0, 0, 0, 0.05));
 }
 
 /* --progress is driven by JS in main.js (setupAnimationFallback) on every frame.
@@ -412,9 +427,12 @@ section {
   width: min(90%, 576px);
   height: auto;
   margin: 0 auto 30px;
-  opacity: 0.95;
   border-radius: var(--radius);
   filter: saturate(0.94) contrast(0.98) brightness(1.01);
+}
+
+.venue__photo {
+  opacity: 0.9;
 }
 
 .venue__trigger {
@@ -578,25 +596,7 @@ section {
 }
 
 /* =========================================================
-   6 — DRESS
-   ========================================================= */
-.dress__title {
-  /* Same secondary-header tier as .venue__name — matched font/size/weight. */
-  font-family: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
-  font-size: clamp(21px, 4.4vw, 28px);
-  font-weight: 500;
-  line-height: 1.2;
-  margin-bottom: 6px;
-}
-
-.dress__desc {
-  color: var(--ink-soft);
-  max-width: 48ch;
-  margin: 0 auto;
-}
-
-/* =========================================================
-   8 — RSVP
+   6 — RSVP
    ========================================================= */
 .rsvp__deadline {
   color: var(--ink-soft);
@@ -756,66 +756,7 @@ section {
 }
 
 /* =========================================================
-   7 — HOTELS
-   ========================================================= */
-.hotels__grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
-  .hotels__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.hotel-card {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-}
-
-.hotel-card img {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-}
-
-.hotel-card__body {
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.hotel-card__name {
-  font-family: "Cormorant Garamond", serif;
-  font-size: 20px;
-}
-
-.hotel-card__meta {
-  font-size: 13px;
-  color: var(--ink-soft);
-}
-
-.hotel-card a {
-  margin-top: auto;
-  align-self: flex-start;
-  font-size: 14px;
-}
-
-.hotels__empty {
-  color: var(--ink-soft);
-  font-style: italic;
-}
-
-/* =========================================================
-   9 — HONEYMOON
+   7 — HONEYMOON
    ========================================================= */
 .honeymoon__desc {
   color: var(--ink-soft);
@@ -847,8 +788,12 @@ section {
   margin-left: 4px;
 }
 
+.honeymoon__photo {
+  margin: 30px auto 0;
+}
+
 /* =========================================================
-   11 — GALLERY
+   9 — GALLERY
    ========================================================= */
 .gallery__carousel {
   display: grid;
