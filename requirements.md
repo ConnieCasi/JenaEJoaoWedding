@@ -67,7 +67,7 @@ export const config = {
   ceremony: {
     name: "Capela de Nossa Senhora do Mar",
     address: "Zambujeira do Mar",
-    photo: "/assets/chapel.png?v=2",
+    photo: "/assets/chapel-transparent.png",
     lat: 0, lng: 0,                    // for maps deep-links (0 = address fallback)
   },
   reception: {
@@ -76,7 +76,7 @@ export const config = {
     lat: 0, lng: 0,
   },
   honeymoon: {
-    image: { src: "/assets/japan.png", alt: "Ilustração de um templo no Japão" },
+    image: { src: "/assets/japan.png?v=2", alt: "Ilustração de um templo no Japão" },
     bankTransfer: { label: "NIF", value: "PLACEHOLDER_NIF" },
     description: "...",
   },
@@ -96,7 +96,7 @@ export const config = {
 4. **Date (clickable)** — clicking downloads a `wedding.ics` file that adds the event to any calendar.
 5. **Cerimónia** — chapel name + address; tap to open the maps dialog with the chapel's deep-links.
 6. **Receção** — reception venue name + address; tap to open the maps dialog with the reception's deep-links.
-7. **Chapel photo** — chapel image from `config.ceremony.photo`, shown immediately after the ceremony/reception addresses at 90% opacity.
+7. **Chapel photo** — chapel image from `config.ceremony.photo`, shown immediately after the ceremony/reception addresses as a PNG with alpha transparency preserved. The image element and parent section must not add a white or coloured background.
 8. **RSVP** — button reveals a form (see RSVP section below).
 9. **Lua-de-mel no Japão** — short paragraph + visible bank-transfer detail (`NIF` placeholder) + "Copiar NIF" button, with the Japan illustration below the transfer details.
 10. **Informações importantes** — accordion of host-written practical notes, including clothing, coat, shoes, where to stay, parking, timings, and rain plan.
@@ -189,7 +189,7 @@ Numbered steps to: create the Sheet, paste the provided Apps Script (≈ 20 line
 ## Honeymoon gift
 
 - No external payment page.
-- Show the Japan illustration from `config.honeymoon.image` below the bank-transfer details at the same rendered size as the chapel image.
+- Show the Japan illustration from `config.honeymoon.image` below the bank-transfer details at the same rendered size as the chapel image. Keep it as a PNG/WebP with alpha transparency preserved.
 - Show the bank-transfer detail directly from `config.honeymoon.bankTransfer`.
 - Current label is `NIF` because that is what the host requested; if this should actually be NIB/IBAN, change only `config.honeymoon.bankTransfer.label` and `value`.
 - Button copies the value to the clipboard and shows a short inline state ("NIF copiado", "NIF por confirmar", or fallback copy guidance).
@@ -258,7 +258,7 @@ Do not include "Posso levar crianças?" or "Posso levar acompanhante?" here beca
 - **Countdown:** removed — host preference.
 
 ### Still pending before launch
-- **Chapel photo** — save as `/assets/chapel.png`.
+- **Chapel photo** — save as `/assets/chapel-transparent.png`; keep PNG/WebP alpha transparency intact.
 - **Lat/lng** for both venues — optional polish; address fallback works in the meantime.
 - **Carousel photos** — current replacement set is saved into `/assets/carosel photos/` and listed in `config.gallery`.
 - **Honeymoon bank-transfer value** — currently labelled as NIF per host request; replace `PLACEHOLDER_NIF` before launch.

@@ -19,7 +19,7 @@ export const config = {
   ceremony: {
     name: "Capela de Nossa Senhora do Mar",
     address: "Zambujeira do Mar",
-    photo: "/assets/chapel.png?v=2",
+    photo: "/assets/chapel-transparent.png",
     lat: 0, // TODO: pin from Google Maps for sharper map deep-links
     lng: 0,
   },
@@ -33,7 +33,7 @@ export const config = {
 
   honeymoon: {
     image: {
-      src: "/assets/japan.png",
+      src: "/assets/japan.png?v=2",
       alt: "Ilustração de um templo no Japão",
     },
     description:

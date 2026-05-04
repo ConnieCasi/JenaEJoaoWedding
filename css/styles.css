@@ -452,8 +452,12 @@ section {
   filter: saturate(0.94) contrast(0.98) brightness(1.01);
 }
 
+.section-photo,
 .venue__photo {
-  opacity: 0.9;
+  background: transparent;
+  border-radius: 0;
+  filter: none;
+  opacity: 1;
 }
 
 .venue__trigger {
