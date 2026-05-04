@@ -4,7 +4,7 @@
 
 Building a one-page wedding invitation site for the user's mother (Eugénia Duarte) and her partner (João Barreto). The site replaces a paper invitation: guests open the link, watch an envelope open as they scroll, see the invitation image, then access all the practical wedding info (date, venue, RSVP, honeymoon gift, important information, and gallery). All copy is in European Portuguese. Mobile-first because most guests will open it on their phones, but it must look polished on desktop too.
 
-Several pieces of content (invitation image, chapel photo, photo gallery, bank-transfer value) are not yet known — the build uses clearly marked placeholders in a single config file so the user can fill them in later without touching layout code.
+Several pieces of content (chapel photo, photo gallery, bank-transfer value) are not yet known — the build uses clearly marked placeholders in a single config file so the user can fill them in later without touching layout code. The invitation image is user-provided and lives at `/assets/invitation.png`; HTML references include a query-string version so the envelope animation does not show a stale cached copy.
 
 ---
 
@@ -114,10 +114,14 @@ Countdown was removed from the original plan — host preference (didn't want a 
 
 Mechanics:
 - Layer order is `envelope-back` → `envelope-slot`/clipped `letter--inside` → `envelope-front` → `envelope-flap`, then an unclipped `letter--escaped` above all envelope layers.
-- Visual treatment should be clean, minimal, and editorial rather than photorealistic: matte cream/beige stationery colours (`#f7f3ee` page background, `#efe6d8` envelope, `#e4d8c5` flap), perfectly straight symmetrical edges, a sharp triangular flap, thin precise fold lines, and only soft depth (`0 8px 20px rgba(0,0,0,0.06)`). Avoid glossy effects, heavy gradients, soft blobs, and dirty grey tones. Keep the effect CSS-only so the invitation still loads as a static, no-build site.
+- Visual treatment should be clean, minimal, and editorial rather than photorealistic: matte cream/beige stationery colours (`#f7f3ee` page background, `#efe6d8` envelope, `#e4d8c5` flap), perfectly straight symmetrical edges, a sharp triangular flap, intentional `12px` outer corner radius, thin and consistent low-contrast fold creases, no bottom centre seam, a subtle hinge edge on the flap fold, and only soft depth (`0 8px 20px rgba(0,0,0,0.06)`). Avoid glossy effects, heavy gradients, soft blobs, and dirty grey tones. Keep the effect CSS-only so the invitation still loads as a static, no-build site.
 - The outer scene/envelope must not use `overflow: hidden`; only the inner `envelope-slot` may clip the letter while it is inside the pocket.
-- Scroll progress 0.0–0.25 → flap rotates open (`rotateX(0deg)` → `rotateX(160deg)`) from `transform-origin: top center`.
-- 0.25–0.88 → invitation card translates upward from deep inside the pocket; initially only a small top strip is visible through the V opening.
+- Scroll progress 0.0–0.25 → flap rotates backward like paper from the top hinge (`rotateX(0deg)` → `rotateX(-160deg)`) with `transform-origin: top center`; it must remain visually attached to the envelope fold line throughout the motion.
+- The flap layer sits behind the letter/front pocket throughout the animation so it reads as folded-back paper rather than a panel floating over the invitation; the card remains invisible until the flap begins opening.
+- The front pocket is an open pocket shape, not a second closed flap; it should mask only the lower portion of the card while leaving the envelope mouth visually open.
+- The flap and front-pocket opening must share the same V geometry: identical top-corner shoulders and centre tip alignment, so they read as parts of the same folded envelope. The flap point should not carry extra edge shadow or darker shading.
+- The flap must never fade, dissolve, blur, or use mask/gradient fades during opening. It should animate only by transform. Use one visible solid triangle at any point; the outside/front is slightly darker cream for depth, and the underside/inside switches to lighter cream after the hinge crosses halfway, without crossfading.
+- 0.25–0.88 → invitation card translates upward from the envelope opening; its start position is anchored near the top/mouth of the envelope rather than the bottom pocket.
 - The pocket mask opens upward with the letter during the slide-out, so the invitation visibly leaves the envelope before any duplicate/top-layer handoff happens.
 - The handoff from the pocket layer to the unclipped escaped layer starts as soon as the invitation reaches its furthest-up / fully-out position and should be almost instant (`progress ≈ 0.88–0.89`), before the final downward settle.
 - 0.88–1.0 → invitation settles noticeably downward above the open envelope while the whole scene lifts enough for the invite itself to finish vertically centred in the viewport.
@@ -254,7 +258,6 @@ Do not include "Posso levar crianças?" or "Posso levar acompanhante?" here beca
 - **Countdown:** removed — host preference.
 
 ### Still pending before launch
-- **Invitation image** (high-resolution, from Canva).
 - **Chapel photo** — save as `/assets/chapel.png`.
 - **Lat/lng** for both venues — optional polish; address fallback works in the meantime.
 - **Carousel photos** — save into `/assets/carosel photos/` and list in `config.gallery`.

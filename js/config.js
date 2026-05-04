@@ -97,5 +97,5 @@ export const config = {
   },
 
   // Google Apps Script web-app URL (deployed from a Google Sheet — see README).
-  rsvpEndpoint: "PLACEHOLDER_GOOGLE_APPS_SCRIPT_URL",
+  rsvpEndpoint: "https://script.google.com/macros/s/AKfycbz8hFAM0GQBeCA8ZPcJ1Rb36AzD-w4O2GorX3Z460KffL3RJ89ItGBALkon3ZwT1VnO/exec",
 };

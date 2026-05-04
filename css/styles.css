@@ -155,7 +155,7 @@ section {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  opacity: calc((1 - var(--progress) * 2) * 0.52);
+  opacity: calc((1 - var(--progress) * 2) * 0.38);
   pointer-events: none;
 }
 
@@ -170,19 +170,22 @@ section {
   --w: min(86vw, 420px);
   /* Envelope aspect 4:3 (landscape). */
   --h: calc(var(--w) * 0.75);
+  --fold-shoulder: 0%;
   --fold-tip: 68%;
+  --flap-h: calc(var(--h) * 0.68);
   --envelope-paper: #efe6d8;
   --envelope-flap: #e4d8c5;
-  --fold-line: rgba(113, 91, 62, 0.14);
-  --fold-highlight: rgba(255, 255, 255, 0.42);
+  --envelope-flap-inside: #efe6d8;
+  --crease-line: rgba(113, 91, 62, 0.07);
+  --inner-highlight: rgba(255, 255, 255, 0.32);
 
   /* Letter geometry — derived once so the slot clip can reference the
      same numbers that drive the .letter's width and aspect. */
   --letter-w: calc(var(--w) * 0.86);
   --letter-h: calc(var(--letter-w) * 10 / 7);
-  /* Park the letter deep in the pocket: its top starts near the V tip, so
-     only a small strip peeks through after the flap opens. */
-  --letter-start-y: calc(var(--h) * 0.7);
+  /* Anchor the letter to the envelope mouth, not the bottom pocket, so it
+     emerges from the opening instead of rising from the base. */
+  --letter-start-y: calc(var(--h) * 0.12);
   /* Travel far enough that the card's lower edge clears the pocket before
      the top-layer handoff starts. The 40px overlap keeps the final card
      visually resting on the envelope rather than floating above it. */
@@ -210,8 +213,10 @@ section {
   position: absolute;
   inset: 0;
   background: var(--envelope-paper);
-  border-radius: 4px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px var(--inner-highlight),
+    0 8px 20px rgba(0, 0, 0, 0.06);
   z-index: 1;
 }
 
@@ -236,7 +241,7 @@ section {
   clip-path: inset(
     calc(var(--letter-progress) * -1 * var(--letter-reveal)) 0 0 0
   );
-  z-index: 2;
+  z-index: 3;
 }
 
 /* 2b — shared letter geometry. Top-positioned inside the pocket so the
@@ -255,7 +260,7 @@ section {
 }
 
 .letter--inside {
-  opacity: calc(1 - var(--escape-progress));
+  opacity: calc(var(--flap-progress) * (1 - var(--escape-progress)));
 }
 
 /* Phase 2: once the invitation has escaped the pocket, this unclipped duplicate
@@ -278,37 +283,36 @@ section {
     0 10px 24px rgba(40, 30, 10, 0.18);
 }
 
-/* 3 — envelope-front (z=3) — front pocket with a deeper V-fold.
-   The V tip matches --fold-tip, so the closed flap covers the cut exactly. */
+/* 3 — envelope-front (z=3) — open front pocket.
+   The real hinged flap is separate; this layer only masks the lower card. */
 .envelope-front {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(113, 91, 62, 0.08) 50%, transparent calc(50% + 0.5px)),
-    linear-gradient(154deg, transparent 49.82%, var(--fold-line) 49.96%, var(--fold-line) 50.04%, transparent 50.18%),
-    linear-gradient(26deg, transparent 49.82%, var(--fold-highlight) 49.96%, var(--fold-highlight) 50.04%, transparent 50.18%),
+    linear-gradient(154deg, transparent 49.86%, var(--crease-line) 49.98%, var(--crease-line) 50.02%, transparent 50.14%),
+    linear-gradient(26deg, transparent 49.86%, var(--crease-line) 49.98%, var(--crease-line) 50.02%, transparent 50.14%),
     var(--envelope-paper);
-  clip-path: polygon(0 0, 50% var(--fold-tip), 100% 0, 100% 100%, 0 100%);
-  z-index: 3;
-  border-radius: 4px;
-  box-shadow: inset 0 -1px 0 rgba(113, 91, 62, 0.08);
+  clip-path: polygon(0 var(--fold-shoulder), 50% var(--fold-tip), 100% var(--fold-shoulder), 100% 100%, 0 100%);
+  z-index: 4;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px var(--inner-highlight),
+    inset 0 -1px 0 rgba(113, 91, 62, 0.05);
 }
 
-/* 4 — envelope-flap (z=4) — triangular flap, rotates 0deg → 160deg
-   transform-origin: top center, so it hinges on the envelope's top fold line.
-   backface-visibility: hidden hides the flap once it has rotated past 90°,
-   which clears the area in front of the letter without needing a z-index swap. */
+/* 4 — envelope-flap (z=4) — one solid triangle, hinged at the top edge.
+   No opacity, gradients, filters, masks, or crossfaded faces are used here:
+   the only animated property is transform, so the flap cannot ghost/fade. */
 .envelope-flap {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: var(--fold-tip);
+  height: var(--flap-h);
   background: none;
   transform-origin: top center;
-  transform: rotateX(calc(var(--flap-progress) * 160deg));
-  backface-visibility: hidden;
-  z-index: 4;
+  transform: scaleY(calc(1 - (var(--flap-progress) * 2)));
+  z-index: 2;
   will-change: transform;
   pointer-events: none;
 }
@@ -316,13 +320,21 @@ section {
 .envelope-flap::before {
   content: "";
   position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left: calc(var(--w) / 2) solid transparent;
+  border-right: calc(var(--w) / 2) solid transparent;
+  border-top-width: var(--flap-h);
+  border-top-style: solid;
+  border-top-color: var(--envelope-flap);
+  transform: translateX(-50%);
   pointer-events: none;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 24%),
-    var(--envelope-flap);
-  clip-path: polygon(-0.4% 0, 100.4% 0, 50% 100.8%);
-  filter: drop-shadow(0 4px 7px rgba(0, 0, 0, 0.05));
+}
+
+.envelope.is-flap-underside .envelope-flap::before {
+  border-top-color: var(--envelope-flap-inside);
 }
 
 /* --progress is driven by JS in main.js (setupAnimationFallback) on every frame.
