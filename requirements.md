@@ -67,7 +67,7 @@ export const config = {
   ceremony: {
     name: "Capela de Nossa Senhora do Mar",
     address: "Zambujeira do Mar",
-    photo: "/assets/chapel-transparent.png",
+    photo: "/assets/chapel-transparent.png?v=3",
     lat: 0, lng: 0,                    // for maps deep-links (0 = address fallback)
   },
   reception: {
@@ -208,8 +208,8 @@ Native `<details>` / `<summary>` accordion — keyboard accessible by default, n
 
 Locked entries, in order:
 
-1. **O que vestir?** — "Traje elegante descontraído, pronto para dançar."
-2. **Devo levar casaco?** — cold evening / coat guidance.
+1. **O que vestir?** — "Traje elegante descontraído, pronto para dançar. Cavalheiros dispensados de gravata."
+2. **Devo levar casaco?** — "Sim. À noite na costa alentejana pode ficar frio, por isso traz um casaco."
 3. **Que calçado devo levar?** — "Saltos altos opcionais, boa disposição obrigatória."
 4. **Onde ficar?** — explain that there are no hotels in or around Almograve, but there are local accommodations and a youth hostel; advise guests to use Booking.com and book early if sleeping there.
 5. **Onde posso estacionar?** — parking guidance.

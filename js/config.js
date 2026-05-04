@@ -19,7 +19,7 @@ export const config = {
   ceremony: {
     name: "Capela de Nossa Senhora do Mar",
     address: "Zambujeira do Mar",
-    photo: "/assets/chapel-transparent.png",
+    photo: "/assets/chapel-transparent.png?v=3",
     lat: 0, // TODO: pin from Google Maps for sharper map deep-links
     lng: 0,
   },
@@ -65,11 +65,11 @@ export const config = {
   importantInfo: [
     {
       q: "O que vestir?",
-      a: "Traje elegante descontraído, pronto para dançar.",
+      a: "Traje elegante descontraído, pronto para dançar. Cavalheiros dispensados de gravata.",
     },
     {
       q: "Devo levar casaco?",
-      a: "Sim. À noite pode ficar frio, por isso traz um casaco.",
+      a: "Sim. À noite na costa alentejana pode ficar frio, por isso traz um casaco.",
     },
     {
       q: "Que calçado devo levar?",
