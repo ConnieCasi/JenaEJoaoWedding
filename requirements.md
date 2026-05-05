@@ -63,6 +63,7 @@ export const config = {
   couple: { bride: "Eugénia Duarte", groom: "João Barreto" },
   date: "2026-10-03T13:00:00+01:00",     // start (ISO with timezone)
   endDate: "2026-10-03T23:00:00+01:00",  // explicit end for the .ics DTEND
+  calendarTimeZone: "Europe/Lisbon",      // TZID used in the .ics file
   rsvpDeadline: "2026-08-01",
   ceremony: {
     name: "Capela de Nossa Senhora do Mar",
@@ -139,10 +140,10 @@ iOS Safari pitfalls to avoid:
 
 ## Date → calendar (.ics)
 
-Generate the ICS file client-side as a Blob from `config.date`, trigger download on click.
+Generate the ICS file client-side as a Blob from `config.date`, trigger download on click. Emit local date-time values with `TZID=config.calendarTimeZone` plus a `VTIMEZONE` block so Apple Calendar / Google Calendar preserve both the 13:00 start and 23:00 end instead of treating the event as zero-duration.
 
 - Include `METHOD:PUBLISH` and a stable `UID` (e.g. `eugenia-joao-2026@wedding.invite`) so re-downloads update the same event rather than duplicate it.
-- Include `SUMMARY`, `LOCATION` (the **ceremony** venue — that's the 13:00 start), `DESCRIPTION` (couple names + a one-liner mentioning the reception venue), `DTSTART` (`config.date`), `DTEND` (`config.endDate` — explicit ISO timestamp, currently 23:00 on the wedding day; host's preferred end).
+- Include `SUMMARY`, `LOCATION` (the **ceremony** venue — that's the 13:00 start), `DESCRIPTION` (couple names + a one-liner mentioning the reception venue), `DTSTART;TZID=Europe/Lisbon` (`config.date`), `DTEND;TZID=Europe/Lisbon` (`config.endDate` — explicit ISO timestamp, currently 23:00 on the wedding day; host's preferred end), `STATUS:CONFIRMED`, and `TRANSP:OPAQUE`.
 
 ---
 

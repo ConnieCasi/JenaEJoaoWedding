@@ -146,9 +146,28 @@ function toIcsDate(d) {
   );
 }
 
+function toIcsLocalDateTime(iso) {
+  const match = String(iso).match(
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?/,
+  );
+
+  if (!match) return toIcsDate(new Date(iso));
+
+  const [, year, month, day, hour, minute, second = "00"] = match;
+  return `${year}${month}${day}T${hour}${minute}${second}`;
+}
+
+function escapeIcsText(text) {
+  return String(text)
+    .replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,");
+}
+
 function buildIcs() {
   const start = new Date(config.date);
-  const end = new Date(config.endDate);
+  const timeZone = config.calendarTimeZone || "Europe/Lisbon";
 
   // Stable UID so re-downloads update the same event instead of duplicating it.
   const uid = `eugenia-joao-${start.getUTCFullYear()}@wedding.invite`;
@@ -162,19 +181,39 @@ function buildIcs() {
     "PRODID:-//wedding-invite//PT",
     "METHOD:PUBLISH",
     "CALSCALE:GREGORIAN",
+    `X-WR-TIMEZONE:${timeZone}`,
+    "BEGIN:VTIMEZONE",
+    `TZID:${timeZone}`,
+    "BEGIN:DAYLIGHT",
+    "TZOFFSETFROM:+0000",
+    "TZOFFSETTO:+0100",
+    "TZNAME:WEST",
+    "DTSTART:19700329T010000",
+    "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+    "END:DAYLIGHT",
+    "BEGIN:STANDARD",
+    "TZOFFSETFROM:+0100",
+    "TZOFFSETTO:+0000",
+    "TZNAME:WET",
+    "DTSTART:19701025T020000",
+    "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+    "END:STANDARD",
+    "END:VTIMEZONE",
     "BEGIN:VEVENT",
     `UID:${uid}`,
     `DTSTAMP:${toIcsDate(new Date())}`,
-    `DTSTART:${toIcsDate(start)}`,
-    `DTEND:${toIcsDate(end)}`,
-    `SUMMARY:${summary}`,
-    `LOCATION:${location.replace(/,/g, "\\,")}`,
-    `DESCRIPTION:${description.replace(/,/g, "\\,")}`,
+    `DTSTART;TZID=${timeZone}:${toIcsLocalDateTime(config.date)}`,
+    `DTEND;TZID=${timeZone}:${toIcsLocalDateTime(config.endDate)}`,
+    `SUMMARY:${escapeIcsText(summary)}`,
+    `LOCATION:${escapeIcsText(location)}`,
+    `DESCRIPTION:${escapeIcsText(description)}`,
+    "STATUS:CONFIRMED",
+    "TRANSP:OPAQUE",
     "END:VEVENT",
     "END:VCALENDAR",
   ];
 
-  return lines.join("\r\n");
+  return `${lines.join("\r\n")}\r\n`;
 }
 
 function setupCalendar() {

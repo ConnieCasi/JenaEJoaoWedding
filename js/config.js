@@ -12,6 +12,7 @@ export const config = {
   date: "2026-10-03T13:00:00+01:00",
   // Explicit end timestamp for the .ics DTEND. 23:00 — host's preferred end.
   endDate: "2026-10-03T23:00:00+01:00",
+  calendarTimeZone: "Europe/Lisbon",
 
   // Last day guests can RSVP. After this date the form is replaced with a closed message.
   rsvpDeadline: "2026-08-01",
