@@ -78,7 +78,7 @@ export const config = {
   },
   honeymoon: {
     image: { src: "/assets/japan.png?v=2", alt: "Ilustração de um templo no Japão" },
-    bankTransfer: { label: "NIF", value: "PLACEHOLDER_NIF" },
+    bankTransfer: { label: "IBAN", value: "PLACEHOLDER_IBAN" },
     description: "...",
   },
   gallery: ["/assets/carosel photos/1.jpg", ...],
@@ -99,7 +99,7 @@ export const config = {
 6. **Receção** — reception venue name + address; tap to open the maps dialog with the reception's deep-links.
 7. **Chapel photo** — chapel image from `config.ceremony.photo`, shown immediately after the ceremony/reception addresses as a PNG with alpha transparency preserved. The image element and parent section must not add a white or coloured background.
 8. **RSVP** — button reveals a form (see RSVP section below).
-9. **Lua-de-mel no Japão** — short paragraph + visible bank-transfer detail (`NIF` placeholder) + "Copiar NIF" button, with the Japan illustration below the transfer details.
+9. **Lua-de-mel no Japão** — short paragraph + visible bank-transfer detail (`IBAN` placeholder) + "Copiar IBAN" button, with the Japan illustration below the transfer details.
 10. **Informações importantes** — accordion of host-written practical notes, including clothing, coat, shoes, where to stay, parking, timings, and rain plan.
 11. **Galeria** — final photo carousel from `/assets/carosel photos/`.
 
@@ -140,10 +140,10 @@ iOS Safari pitfalls to avoid:
 
 ## Date → calendar (.ics)
 
-Generate the ICS file client-side as a Blob from `config.date`, trigger download on click. Emit local date-time values with `TZID=config.calendarTimeZone` plus a `VTIMEZONE` block so Apple Calendar / Google Calendar preserve both the 13:00 start and 23:00 end instead of treating the event as zero-duration.
+Generate the ICS file client-side as a Blob from `config.date`, trigger download on click. Emit the start as a local date-time value with `TZID=config.calendarTimeZone` plus a `VTIMEZONE` block, and emit the event length as `DURATION` calculated from `config.date` → `config.endDate`. This avoids iOS import paths that ignore `DTEND` and collapse the event to 13:00–13:00.
 
-- Include `METHOD:PUBLISH` and a stable `UID` (e.g. `eugenia-joao-2026@wedding.invite`) so re-downloads update the same event rather than duplicate it.
-- Include `SUMMARY`, `LOCATION` (the **ceremony** venue — that's the 13:00 start), `DESCRIPTION` (couple names + a one-liner mentioning the reception venue), `DTSTART;TZID=Europe/Lisbon` (`config.date`), `DTEND;TZID=Europe/Lisbon` (`config.endDate` — explicit ISO timestamp, currently 23:00 on the wedding day; host's preferred end), `STATUS:CONFIRMED`, and `TRANSP:OPAQUE`.
+- Include `METHOD:PUBLISH` and a stable `UID` for the current corrected import shape (currently `eugenia-joao-2026-10h@wedding.invite`) so re-downloads of this version update the same event rather than duplicate it. The `-10h` suffix intentionally avoids iOS reusing an older cached zero-duration import from the first UID.
+- Include `SUMMARY`, `LOCATION` (the **ceremony** venue — that's the 13:00 start), `DESCRIPTION` (couple names + a one-liner mentioning the reception venue), `DTSTART;TZID=Europe/Lisbon` (`config.date`), `DURATION` (currently `PT10H`, calculated from `config.endDate`), `STATUS:CONFIRMED`, and `TRANSP:OPAQUE`.
 
 ---
 
@@ -192,8 +192,8 @@ Numbered steps to: create the Sheet, paste the provided Apps Script (≈ 20 line
 - No external payment page.
 - Show the Japan illustration from `config.honeymoon.image` below the bank-transfer details at the same rendered size as the chapel image. Keep it as a PNG/WebP with alpha transparency preserved.
 - Show the bank-transfer detail directly from `config.honeymoon.bankTransfer`.
-- Current label is `NIF` because that is what the host requested; if this should actually be NIB/IBAN, change only `config.honeymoon.bankTransfer.label` and `value`.
-- Button copies the value to the clipboard and shows a short inline state ("NIF copiado", "NIF por confirmar", or fallback copy guidance).
+- Current label is `IBAN` because that is what the host requested; replace `config.honeymoon.bankTransfer.value` with the real value before launch.
+- Button copies the value to the clipboard and shows a short inline state ("IBAN copiado", "IBAN por confirmar", or fallback copy guidance).
 
 ---
 
@@ -262,7 +262,7 @@ Do not include "Posso levar crianças?" or "Posso levar acompanhante?" here beca
 - **Chapel photo** — save as `/assets/chapel-transparent.png`; keep PNG/WebP alpha transparency intact.
 - **Lat/lng** for both venues — optional polish; address fallback works in the meantime.
 - **Carousel photos** — current replacement set is saved into `/assets/carosel photos/` and listed in `config.gallery`.
-- **Honeymoon bank-transfer value** — currently labelled as NIF per host request; replace `PLACEHOLDER_NIF` before launch.
+- **Honeymoon bank-transfer value** — currently labelled as IBAN per host request; replace `PLACEHOLDER_IBAN` before launch.
 - **Names format** — host is undecided between full names ("Eugénia Duarte & João Barreto") and first names only ("Eugénia & João"). Currently set to full names.
 - **Confirmation of color palette + fonts** (default sage / cream / dusty rose pending host approval).
 - **Apps Script web app deployed**, URL pasted into `config.rsvpEndpoint`.
@@ -277,7 +277,7 @@ End-to-end check before declaring the site ready:
 2. **Calendar:** click the date on iPhone, Android, macOS — confirm the event lands in Apple Calendar / Google Calendar with correct title, location, time, timezone.
 3. **Maps:** for **both** venues (cerimónia and receção), click each of the 3 maps buttons on iPhone and Android — confirm each opens the correct app with the right venue pinned. Verify the dialog updates between taps (tapping ceremony then reception should not still show the ceremony's coords).
 4. **RSVP:** submit the form with all field combinations (attending, +1, kids, dietary). Confirm a row appears in the Google Sheet and an email arrives to the host. Re-submit with same name → second row appears, microcopy is clear. Submit after `rsvpDeadline` → form is replaced with the "encerrado" message. Submit with the honeypot filled → request is rejected.
-5. **Honeymoon:** click "Copiar NIF" with a real value configured → confirm the value is copied and the button state returns to "Copiar NIF"; with placeholder value, confirm it shows "NIF por confirmar".
+5. **Honeymoon:** click "Copiar IBAN" with a real value configured → confirm the value is copied and the button state returns to "Copiar IBAN"; with placeholder value, confirm it shows "IBAN por confirmar".
 6. **Informações importantes:** open / close each item with mouse and keyboard.
 7. **Galeria:** with multiple photos configured, confirm mobile shows one full photo at a time, auto-advances slowly, wraps from last to first, and previous/next controls wrap on mobile and desktop. With no photos configured, confirm the whole section is hidden. With reduced motion enabled, confirm auto-advance does not run.
 8. **Performance:** Lighthouse mobile score ≥ 90 on Performance and Accessibility. Total page weight under ~1.5 MB (compressed images).

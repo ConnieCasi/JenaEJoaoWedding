@@ -165,12 +165,21 @@ function escapeIcsText(text) {
     .replace(/,/g, "\\,");
 }
 
+function toIcsDuration(start, end) {
+  const minutes = Math.max(1, Math.round((end.getTime() - start.getTime()) / 60000));
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return `PT${hours ? `${hours}H` : ""}${remainingMinutes ? `${remainingMinutes}M` : ""}`;
+}
+
 function buildIcs() {
   const start = new Date(config.date);
+  const end = new Date(config.endDate);
   const timeZone = config.calendarTimeZone || "Europe/Lisbon";
 
-  // Stable UID so re-downloads update the same event instead of duplicating it.
-  const uid = `eugenia-joao-${start.getUTCFullYear()}@wedding.invite`;
+  // Stable UID for this corrected import shape; avoids iOS reusing older cached
+  // zero-duration imports that used the first UID.
+  const uid = `eugenia-joao-${start.getUTCFullYear()}-10h@wedding.invite`;
   const summary = `Casamento — ${config.couple.bride} & ${config.couple.groom}`;
   const description = `Casamento de ${config.couple.bride} e ${config.couple.groom}. Cerimónia em ${config.ceremony.name}; receção em ${config.reception.name}.`;
   const location = `${config.ceremony.name}, ${config.ceremony.address}`;
@@ -202,8 +211,10 @@ function buildIcs() {
     "BEGIN:VEVENT",
     `UID:${uid}`,
     `DTSTAMP:${toIcsDate(new Date())}`,
+    `LAST-MODIFIED:${toIcsDate(new Date())}`,
+    "SEQUENCE:2",
     `DTSTART;TZID=${timeZone}:${toIcsLocalDateTime(config.date)}`,
-    `DTEND;TZID=${timeZone}:${toIcsLocalDateTime(config.endDate)}`,
+    `DURATION:${toIcsDuration(start, end)}`,
     `SUMMARY:${escapeIcsText(summary)}`,
     `LOCATION:${escapeIcsText(location)}`,
     `DESCRIPTION:${escapeIcsText(description)}`,
@@ -242,7 +253,7 @@ function setupHoneymoonCopy() {
   const transfer = config.honeymoon.bankTransfer;
   btn.addEventListener("click", async () => {
     if (!transfer.value || isPlaceholder(transfer.value)) {
-      btn.textContent = "NIF por confirmar";
+      btn.textContent = `${transfer.label} por confirmar`;
       return;
     }
 

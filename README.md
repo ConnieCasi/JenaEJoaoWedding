@@ -116,17 +116,17 @@ Current setup:
 ```js
 honeymoon: {
   bankTransfer: {
-    label: "NIF",
-    value: "PLACEHOLDER_NIF",
+    label: "IBAN",
+    value: "PLACEHOLDER_IBAN",
   },
 }
 ```
 
-If the host decides this should be NIB or IBAN instead of NIF, change only `label` and `value`.
+Replace `value` with the real IBAN before sharing the invite.
 
 ### Testing
 
-Before sharing the invite, replace `PLACEHOLDER_NIF` with the real value, open the site, click "Copiar NIF", and paste somewhere to confirm the copied value is correct.
+Before sharing the invite, replace `PLACEHOLDER_IBAN` with the real value, open the site, click "Copiar IBAN", and paste somewhere to confirm the copied value is correct.
 
 ## Pre-launch checklist
 
@@ -137,7 +137,7 @@ Before sharing the invite, replace `PLACEHOLDER_NIF` with the real value, open t
 - [ ] Hotels filled in `config.hotels`.
 - [ ] Important information filled in `config.importantInfo`.
 - [ ] Bank-transfer value added to `config.honeymoon.bankTransfer.value`.
-- [ ] "Copiar NIF" tested with the real value.
+- [ ] "Copiar IBAN" tested with the real value.
 - [ ] Apps Script deployed; URL in `config.rsvpEndpoint`.
 - [ ] `HOST_EMAIL` and `RSVP_DEADLINE` set inside the Apps Script.
 - [ ] Tested on iPhone Safari, Android Chrome, desktop Chrome, desktop Safari.

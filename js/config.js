@@ -40,8 +40,8 @@ export const config = {
     description:
       "Em vez de presentes tradicionais, queremos guardar memórias. Estamos a juntar para a nossa lua-de-mel no Japão e qualquer contributo será recebido com muito carinho.",
     bankTransfer: {
-      label: "NIF",
-      value: "PLACEHOLDER_NIF",
+      label: "IBAN",
+      value: "PLACEHOLDER_IBAN",
     },
   },
 
