@@ -78,7 +78,7 @@ export const config = {
   },
   honeymoon: {
     image: { src: "/assets/japan.png?v=2", alt: "Ilustração de um templo no Japão" },
-    bankTransfer: { label: "IBAN", value: "PLACEHOLDER_IBAN" },
+    bankTransfer: { label: "IBAN", value: "PT50 3560 0001 9001 8491 7740 4" },
     description: "...",
   },
   gallery: ["/assets/carosel photos/1.jpg", ...],
@@ -99,7 +99,7 @@ export const config = {
 6. **Receção** — reception venue name + address; tap to open the maps dialog with the reception's deep-links.
 7. **Chapel photo** — chapel image from `config.ceremony.photo`, shown immediately after the ceremony/reception addresses as a PNG with alpha transparency preserved. The image element and parent section must not add a white or coloured background.
 8. **RSVP** — button reveals a form (see RSVP section below).
-9. **Lua-de-mel no Japão** — short paragraph + visible bank-transfer detail (`IBAN` placeholder) + "Copiar IBAN" button, with the Japan illustration below the transfer details.
+9. **Lua-de-mel no Japão** — short paragraph + visible bank-transfer detail (`IBAN`) + "Copiar IBAN" button, with the Japan illustration below the transfer details.
 10. **Informações importantes** — accordion of host-written practical notes, including clothing, coat, shoes, where to stay, parking, timings, and rain plan.
 11. **Galeria** — final photo carousel from `/assets/carosel photos/`.
 
@@ -192,7 +192,7 @@ Numbered steps to: create the Sheet, paste the provided Apps Script (≈ 20 line
 - No external payment page.
 - Show the Japan illustration from `config.honeymoon.image` below the bank-transfer details at the same rendered size as the chapel image. Keep it as a PNG/WebP with alpha transparency preserved.
 - Show the bank-transfer detail directly from `config.honeymoon.bankTransfer`.
-- Current label is `IBAN` because that is what the host requested; replace `config.honeymoon.bankTransfer.value` with the real value before launch.
+- Current label is `IBAN` because that is what the host requested; the real value is configured in `config.honeymoon.bankTransfer.value`.
 - Button copies the value to the clipboard and shows a short inline state ("IBAN copiado", "IBAN por confirmar", or fallback copy guidance).
 
 ---
@@ -262,7 +262,6 @@ Do not include "Posso levar crianças?" or "Posso levar acompanhante?" here beca
 - **Chapel photo** — save as `/assets/chapel-transparent.png`; keep PNG/WebP alpha transparency intact.
 - **Lat/lng** for both venues — optional polish; address fallback works in the meantime.
 - **Carousel photos** — current replacement set is saved into `/assets/carosel photos/` and listed in `config.gallery`.
-- **Honeymoon bank-transfer value** — currently labelled as IBAN per host request; replace `PLACEHOLDER_IBAN` before launch.
 - **Names format** — host is undecided between full names ("Eugénia Duarte & João Barreto") and first names only ("Eugénia & João"). Currently set to full names.
 - **Confirmation of color palette + fonts** (default sage / cream / dusty rose pending host approval).
 - **Apps Script web app deployed**, URL pasted into `config.rsvpEndpoint`.

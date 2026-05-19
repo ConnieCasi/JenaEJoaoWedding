@@ -41,7 +41,7 @@ export const config = {
       "Em vez de presentes tradicionais, queremos guardar memórias. Estamos a juntar para a nossa lua-de-mel no Japão e qualquer contributo será recebido com muito carinho.",
     bankTransfer: {
       label: "IBAN",
-      value: "PLACEHOLDER_IBAN",
+      value: "PT50 3560 0001 9001 8491 7740 4",
     },
   },
 
