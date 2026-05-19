@@ -117,16 +117,16 @@ Current setup:
 honeymoon: {
   bankTransfer: {
     label: "IBAN",
-    value: "PLACEHOLDER_IBAN",
+    value: "PT50 3560 0001 9001 8491 7740 4",
   },
 }
 ```
 
-Replace `value` with the real IBAN before sharing the invite.
+The real IBAN is configured in `value`.
 
 ### Testing
 
-Before sharing the invite, replace `PLACEHOLDER_IBAN` with the real value, open the site, click "Copiar IBAN", and paste somewhere to confirm the copied value is correct.
+Before sharing the invite, open the site, click "Copiar IBAN", and paste somewhere to confirm the copied value is correct.
 
 ## Pre-launch checklist
 
@@ -136,7 +136,7 @@ Before sharing the invite, replace `PLACEHOLDER_IBAN` with the real value, open 
 - [ ] Chapel photo added as `assets/chapel.png`.
 - [ ] Hotels filled in `config.hotels`.
 - [ ] Important information filled in `config.importantInfo`.
-- [ ] Bank-transfer value added to `config.honeymoon.bankTransfer.value`.
+- [x] Bank-transfer value added to `config.honeymoon.bankTransfer.value`.
 - [ ] "Copiar IBAN" tested with the real value.
 - [ ] Apps Script deployed; URL in `config.rsvpEndpoint`.
 - [ ] `HOST_EMAIL` and `RSVP_DEADLINE` set inside the Apps Script.
