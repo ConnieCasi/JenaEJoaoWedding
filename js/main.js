@@ -378,6 +378,22 @@ function setupRsvpSubmit() {
     if (data.get("website")) return; // bot
     if (Date.now() - pageLoadAt < RSVP_MIN_DWELL_MS) return; // bot
 
+    const name = String(data.get("name") || "").trim();
+    if (!name) {
+      status.className = "rsvp__status is-error";
+      status.textContent = "Indica o teu nome para continuar.";
+      form.elements.name?.focus();
+      return;
+    }
+
+    const attending = data.get("attending");
+    if (!attending) {
+      status.className = "rsvp__status is-error";
+      status.textContent = "Indica se vais estar presente.";
+      form.querySelector("[name='attending']")?.focus();
+      return;
+    }
+
     if (isPlaceholder(config.rsvpEndpoint)) {
       status.className = "rsvp__status is-error";
       status.textContent = "Endpoint não configurado. Avisa os anfitriões.";
@@ -395,8 +411,8 @@ function setupRsvpSubmit() {
       : [];
 
     const payload = new URLSearchParams({
-      name: data.get("name") || "",
-      attending: data.get("attending") || "",
+      name,
+      attending,
       hasPlusOne: data.get("hasPlusOne") ? "yes" : "no",
       plusOneName: data.get("plusOneName") || "",
       hasKids: hasKids ? "yes" : "no",
